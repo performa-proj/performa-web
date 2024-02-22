@@ -85,7 +85,7 @@ const PoSSessionInputs = () => {
   const handleProcessRowUpdate = (nRow: any) => {
     nRow.quantity = Number(nRow.quantity);
     nRow.sellingAt = Number(nRow.sellingAt);
-    nRow.total = nRow.quantity * nRow.sellingAt;
+    nRow.subtotal = nRow.quantity * nRow.sellingAt;
 
     const indexAt = Orderlines.findIndexAtByID(orderlines, nRow.id);
     const data = [...orderlines];
