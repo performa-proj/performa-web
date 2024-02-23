@@ -5,6 +5,12 @@ import { styled } from "@mui/material/styles";
 
 import { IOrderline, Orderlines } from "./Orderlines";
 
+type WeightRowType = {
+  id: "WEIGHT";
+  title: string;
+  subtotal: number;
+};
+
 type DiscountRowType = {
   id: "DISCOUNT";
   title: string;
@@ -17,7 +23,7 @@ type TotalRowType = {
   subtotal: number;
 };
 
-type Row = IOrderline | DiscountRowType | TotalRowType;
+type Row = IOrderline | WeightRowType | DiscountRowType | TotalRowType;
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -99,12 +105,13 @@ const PoSGrid = (props: {
   const rows: Row[] = [...orderlines];
 
   if (orderlines.length > 0) {
-    const { discount, total } = Orderlines.getSummary(orderlines);
+    const { discount, total, weight } = Orderlines.getSummary(orderlines);
 
     if (discount !== 0) {
       rows.push({ id: "DISCOUNT", title: "ส่วนลด", subtotal: discount });
     }
 
+    rows.push({ id: "WEIGHT", title: "น้ำหนักรวม", subtotal: weight });
     rows.push({ id: "TOTAL", title: "รวมทั้งหมด", subtotal: total });
   }
 
@@ -141,14 +148,14 @@ const PoSGrid = (props: {
     flex: 1,
     type: "string",
     colSpan: ({ row }) => {
-      if (row.id === "TOTAL" || row.id === "DISCOUNT") {
+      if (row.id === "TOTAL" || row.id === "DISCOUNT" || row.id === "WEIGHT") {
         return 3;
       }
 
       return undefined;
     },
     renderCell: (params) => {
-      if (params.id === "TOTAL" || params.id === "DISCOUNT") {
+      if (params.id === "TOTAL" || params.id === "DISCOUNT" || params.id === "WEIGHT") {
         return (<strong>{params.value}</strong>);
       }
 
@@ -167,7 +174,7 @@ const PoSGrid = (props: {
     type: "number",
     renderCell: (params) => {
       const txt = Number(params.value || 0).toLocaleString();
-      if (params.id === "TOTAL" || params.id === "DISCOUNT") {
+      if (params.id === "TOTAL" || params.id === "DISCOUNT" || params.id === "WEIGHT") {
         return (<strong>{txt}</strong>);
       }
 
@@ -178,7 +185,7 @@ const PoSGrid = (props: {
     width: 100,
     type: "actions",
     getActions: ({ row }) => {
-      if (row.id === "TOTAL" || row.id === "DISCOUNT") {
+      if (row.id === "TOTAL" || row.id === "DISCOUNT" || row.id === "WEIGHT") {
         return [];
       }
 

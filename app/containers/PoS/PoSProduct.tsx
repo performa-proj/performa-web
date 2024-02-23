@@ -202,9 +202,9 @@ const PoSProduct = (props: {
           name="Product"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={async (e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
-              await handleSearchProduct();
+              handleSearchProduct();
             }
           }}
           sx={{ flexGrow: 1 }}

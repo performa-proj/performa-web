@@ -2,6 +2,9 @@ import * as React from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
 import Input from "@mui/material/Input";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
@@ -70,6 +73,8 @@ const PaymentModal = (props: {
     creditline: 0,
   });
 
+  const [useCheque, setCheque] = React.useState(false);
+
   const handlePayment = (type: "cash" | "transfer" | "creditline", value: number) => {
     let { cash, transfer, creditline } = payment;
 
@@ -137,9 +142,12 @@ const PaymentModal = (props: {
     handleClose();
   };
 
+  const handleChequeChange = () => {
+  };
+
   return (
     <Modal
-      open={isOpen}
+      open={true}
       onClose={handleClose}
     >
       <Box sx={{
@@ -157,10 +165,10 @@ const PaymentModal = (props: {
           การชำระเงิน
         </Typography>
         <Stack direction="row">
+          <Box sx={{ flexGrow: 1 }}>
+            <Remaining total={total} payment={payment} />
+          </Box>
           <Typography sx={{ fontSize: "18px", padding: "4px 8px 3px" }}>รวมทั้งหมด: <span style={{ fontSize: "20px", fontWeight: "bold", paddingLeft: "8px" }}>{total.toLocaleString()}</span></Typography>
-        </Stack>
-        <Stack direction="row">
-          <Remaining total={total} payment={payment} />
         </Stack>
         <Stack direction="row" sx={{ mb: 2 }}>
           <Change total={total} payment={payment} />
@@ -197,6 +205,16 @@ const PaymentModal = (props: {
             }}
             sx={{ flexGrow: 1, fontSize: "18px" }}
           />
+        </Stack>
+        <Stack direction="row" sx={{ mt: 1.5, mb: 1 }}>
+          <FormGroup >
+            <FormControlLabel
+              control={
+                <Checkbox checked={useCheque} onChange={handleChequeChange} name="useCheque" />
+              }
+              label="จ่ายด้วยเช็ค" />
+            <FormControlLabel control={<Checkbox />} label="จัดส่งสินค้า" />
+          </FormGroup>
         </Stack>
         <Stack direction="row" sx={{ mt: 4, float: "right" }}>
           <Button onClick={handleClose}>ยกเลิก</Button>
