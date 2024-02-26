@@ -12,7 +12,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.session, "Missing 'session' param.");
   const orders = await Orders.listBySessionID({ sessionID: params.session });
 
-  return json({ data: orders })
+  return json({ data: orders });
 };
 
 const PoSSessionList = () => {

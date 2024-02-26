@@ -8,10 +8,10 @@ import { Outlet } from "@remix-run/react";
 const PoSLayout = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" title="PoS">
+      <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            PoS Session
+            PoS
           </Typography>
         </Toolbar>
       </AppBar>

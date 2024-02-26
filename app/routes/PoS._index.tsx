@@ -2,13 +2,13 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import PoSControl from "../containers/PoS/PoSControl";
-import PoSSessionCard from "../containers/PoS/PoSSessionCard";
+import PoSSessionCard from "../containers/PoS/PoSSessionCard.bk";
 import { Sessions } from "../services/Sessions";
-import { ISession } from "../services/Sessions/ISessions";
+import { SessionDataType } from "../services/Sessions/SessionDataType";
 import { Stack } from "@mui/material";
 
 const PoS = () => {
-  const [sessions, setSessions] = React.useState<null | ISession[]>(null);
+  const [sessions, setSessions] = React.useState<null | SessionDataType[]>(null);
 
   const loadOpenedSessions = React.useCallback(async () => {
     const result = await Sessions.listByStatus({ status: "OPENED" });
@@ -19,7 +19,7 @@ const PoS = () => {
     loadOpenedSessions();
   }, []);
 
-  const handleSessionOpen = (session: ISession) => {
+  const handleSessionOpen = (session: SessionDataType) => {
     const data = sessions ? [...sessions, session] : [session];
     setSessions(data);
   };

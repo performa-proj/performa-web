@@ -14,6 +14,9 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
+import store from "./store";
+import { Provider } from "react-redux";
+
 export default function App() {
   return (
     <html lang="en">
@@ -24,7 +27,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Provider store={store}>
+          <Outlet />
+        </Provider>
         <CSSBaseline />
         <ScrollRestoration />
         <Scripts />
