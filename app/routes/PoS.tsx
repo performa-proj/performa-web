@@ -1,7 +1,7 @@
 import * as React from "react";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,8 +14,12 @@ import Typography from "@mui/material/Typography";
 
 import NumberInput from "../containers/NumberInput";
 import SessionCard from "../containers/PoS/PoSSessionCard";
-import { loadedOpenedSessions, createNewSession } from "../containers/PoS/PoSSlice";
 import { Sessions } from "../services/Sessions";
+import {
+  PoSStateType,
+  createNewSession,
+  loadOpenedSessions,
+} from "../containers/PoS/PoSSlice";
 
 const OpeningSession = (props: {
   isOpen: boolean;
@@ -78,17 +82,15 @@ const OpeningSession = (props: {
   );
 };
 
-export const loader = async () => {
-  const sessions = await Sessions.listByStatus({ status: "OPENED" });
-  return json({ data: sessions });
-};
-
 const PoS = () => {
-  const dispatch = useDispatch();
-  const { data } = useLoaderData<typeof loader>();
-  console.log(data);
+  const sessions = useSelector<any>(state => state.pos.openSessions);
+  const dispatch = useDispatch<any>();
 
-  dispatch(loadedOpenedSessions(data));
+  if (sessions === null) {
+    dispatch(loadOpenedSessions());
+  }
+
+  // dispatch(loadedOpenedSessions(data));
 
   const [isOpen, setOpen] = React.useState(false);
   const handleModalClose = () => setOpen(false);
@@ -129,7 +131,6 @@ const PoS = () => {
             </Button>
           </Box>
         </Stack>
-        <SessionCard />
       </Container>
       <OpeningSession
         isOpen={isOpen}

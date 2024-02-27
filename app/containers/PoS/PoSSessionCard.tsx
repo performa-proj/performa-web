@@ -8,9 +8,9 @@ import Typography from "@mui/material/Typography";
 import { OpenedSessionDataType } from "../../services/Sessions/SessionDataType";
 
 const PoSOpenedSessionStack = (props: {
-  // session: OpenedSessionDataType;
+  session: OpenedSessionDataType;
 }) => {
-  // const { session } = props;
+  const { session } = props;
 
   return (
     <Stack
@@ -20,7 +20,7 @@ const PoSOpenedSessionStack = (props: {
       <Stack sx={{ flexGrow: 1 }}>
         <Box sx={{ mb: "16px" }}>
           <Typography variant="h6" fontWeight="bold" color="#333" >
-            Session: 1567567567908909
+            จุดขาย: 1567567567908909
           </Typography>
           <Typography variant="body1" color="#444">
             [102055]
@@ -34,12 +34,16 @@ const PoSOpenedSessionStack = (props: {
         </Typography>
       </Stack>
       <Stack>
-        <Button></Button>
-        <Link to={`/pos/session/i/1235`}>
-          <Button
-            variant="contained"
-          >เข้าใช้งาน</Button>
-        </Link>
+        <Box sx={{ mb: "16px" }}>
+          <Link to={`/pos/session/i/1235`}>
+            <Button
+              variant="contained"
+            >เข้าใช้งาน</Button>
+          </Link>
+        </Box>
+        <Button
+          variant="outlined"
+        >ปิดจุดขาย</Button>
       </Stack>
     </Stack>
   );
