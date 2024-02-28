@@ -147,7 +147,7 @@ const PaymentModal = (props: {
 
   return (
     <Modal
-      open={true}
+      open={isOpen}
       onClose={handleClose}
     >
       <Box sx={{

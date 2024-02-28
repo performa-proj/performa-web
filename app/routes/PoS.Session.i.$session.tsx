@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useParams, useNavigate } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -18,6 +19,14 @@ import { IOrder } from "../services/Orders/IOrder";
 import { ICustomer } from "../services/Customers/ICustomer";
 import { Sessions } from "~/services/Sessions";
 
+export const loader = async ({
+  params,
+}: LoaderFunctionArgs) => {
+  invariant(params.session, "Missing 'session' param.");
+  const session = await Sessions.getByID({ id: params.session });
+  return json({ session });
+};
+
 const PoSSessionInputs = () => {
   const params = useParams();
   invariant(params.session, "Missing 'session' param.");
@@ -34,8 +43,9 @@ const PoSSessionInputs = () => {
       id: sessionID,
     });
 
+    console.log(1, result);
     if (!result) {
-      navigate("/pos");
+      // navigate("/pos");
     }
   }, []);
 
