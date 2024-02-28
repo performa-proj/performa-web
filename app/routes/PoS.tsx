@@ -1,6 +1,4 @@
 import * as React from "react";
-import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { useDispatch, useSelector } from "react-redux";
 
 import AppBar from "@mui/material/AppBar";
@@ -13,12 +11,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import NumberInput from "../containers/NumberInput";
-import SessionCard from "../containers/PoS/PoSSessionCard";
+import PoSOpenedSessionsStack from "../containers/PoS/PoSOpenedSessionsStack";
 import { Sessions } from "../services/Sessions";
 import {
   PoSStateType,
   createNewSession,
   loadOpenedSessions,
+  PoSSelectors,
 } from "../containers/PoS/PoSSlice";
 
 const OpeningSession = (props: {
@@ -83,14 +82,12 @@ const OpeningSession = (props: {
 };
 
 const PoS = () => {
-  const sessions = useSelector<any>(state => state.pos.openSessions);
+  let sessions: any[] | null = PoSSelectors.getSessions() as any[] | null;
   const dispatch = useDispatch<any>();
 
   if (sessions === null) {
     dispatch(loadOpenedSessions());
   }
-
-  // dispatch(loadedOpenedSessions(data));
 
   const [isOpen, setOpen] = React.useState(false);
   const handleModalClose = () => setOpen(false);
@@ -111,11 +108,11 @@ const PoS = () => {
       >
         <Stack
           direction={"row"}
-          sx={{ borderBottom: "1px solid #aaa", paddingX: "12px", paddingY: "16px" }}
+          sx={{ paddingX: "12px", paddingY: "16px" }}
         >
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6" component="div" fontWeight="bold" color="#333" sx={{ mb: "16px" }}>
-              Point of Sales
+              Point of Sales Control
             </Typography>
             <Typography variant="body1" component="div">
               จุดขายที่เปิดอยู่:
@@ -131,13 +128,16 @@ const PoS = () => {
             </Button>
           </Box>
         </Stack>
+        <PoSOpenedSessionsStack
+          sessions={sessions}
+        />
       </Container>
       <OpeningSession
         isOpen={isOpen}
         onClose={handleModalClose}
       />
     </>
-  )
+  );
 };
 
 export default PoS;

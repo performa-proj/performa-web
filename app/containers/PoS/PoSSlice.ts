@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+
+import { useSelector } from "react-redux";
 import { Sessions } from "../../services/Sessions";
 import { OpenedSessionDataType } from "../../services/Sessions/SessionDataType";
 
@@ -74,3 +76,35 @@ export const posSlice = createSlice({
 export const { } = posSlice.actions;
 
 export default posSlice.reducer;
+
+export const PoSSelectors = {
+  getSessions: () =>
+    useSelector<any>(state => {
+      let openSessions = state.pos.openSessions;
+
+      if (Array.isArray(openSessions)) {
+        openSessions = openSessions.map((each) => ({
+          _id: each._id,
+          code: each.code,
+          initialCash: each.initialCash,
+          start: new Date(each.start),
+          status: each.status,
+          createdAt: new Date(each.createdAt),
+          updatedAt: new Date(each.updatedAt),
+        }))
+          .sort((a, b) => {
+            if (a.start < b.start) {
+              return 1;
+            } else if (a.start > b.start) {
+              return -1;
+            }
+
+            return 0;
+          });
+
+        return openSessions;
+      }
+
+      return null;
+    }),
+};
