@@ -16,21 +16,12 @@ export const createNewSession = createAsyncThunk<
   },
 );
 
-export const loadOpenedSessions = createAsyncThunk(
-  "pos/loadOpenedSessions",
-  async () => {
-    const result = await Sessions.listByStatus({ status: "OPENED" });
-    return result;
-  },
-);
-
+// State
 export type PoSStateType = {
-  loading: "idle" | "loading";
   openSessions: OpenedSessionDataType[] | null;
 };
 
 const initialState: PoSStateType = {
-  loading: "idle",
   openSessions: null,
 };
 
@@ -39,21 +30,8 @@ export const posSlice = createSlice({
   name: "pos",
   initialState,
   reducers: {
-    loadedOpenedSessions: (state, action) => {
-      const openSessions: OpenedSessionDataType[] = action.payload.map((each: any) => {
-        const { _id, code, initialCash, status, start, createdAt, updatedAt, } = each;
-
-        return {
-          _id,
-          code,
-          initialCash,
-          status,
-          start: new Date(start),
-          createdAt: new Date(createdAt),
-          updatedAt: new Date(updatedAt),
-        };
-      });
-      state.openSessions = openSessions;
+    setOpenedSessions: (state, action) => {
+      state.openSessions = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,14 +44,10 @@ export const posSlice = createSlice({
         state.openSessions.push(data);
       }
     });
-    builder.addCase(loadOpenedSessions.fulfilled, (state, action) => {
-      const sessions = action.payload;
-      state.openSessions = sessions;
-    });
   },
 });
 
-export const { } = posSlice.actions;
+export const { setOpenedSessions } = posSlice.actions;
 
 export default posSlice.reducer;
 

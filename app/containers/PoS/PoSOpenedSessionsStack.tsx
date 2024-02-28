@@ -32,10 +32,15 @@ const OpenedSession = (props: {
       sx={{ borderTop: "1px solid #aaa", paddingX: "12px", paddingY: "16px" }}
     >
       <Stack sx={{ flexGrow: 1 }}>
-        <Box sx={{ mb: "16px", height: "48px" }}>
+        <Box sx={{ mb: "16px", minHeight: "48px" }}>
           <Typography variant="body1" fontWeight="bold" color="#333" >
-            SESSION {disabled ? (<></>) : (<>[{session.code}]</>)}
+            SESSION
           </Typography>
+          {disabled ? (<></>) : (
+            <Typography variant="body1" fontWeight="bold" color="#333" >
+              [{session.code}]
+            </Typography>
+          )}
         </Box>
         <Typography variant="body1" component="div" sx={{ mb: "4px" }}>
           เปิดใช้งาน: <span style={{ fontWeight: "bold" }}>{start}</span>
@@ -46,7 +51,7 @@ const OpenedSession = (props: {
       </Stack>
       <Stack>
         <Box sx={{ mb: "16px" }}>
-          <Link to={`/pos/session/i/1235`}>
+          <Link to={`/pos/session/i/${session._id}`}>
             <Button
               variant="contained"
               disabled={disabled}
@@ -62,17 +67,27 @@ const OpenedSession = (props: {
 };
 
 const PoSOpenedSessionsStack = (props: {
-  sessions: OpenedSessionDataType[] | null;
+  sessions: OpenedSessionDataType[];
 }) => {
-  const sessions = props.sessions ? props.sessions : [];
+  const { sessions } = props;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const { todays, others } = sessions.reduce((result, each) => {
-    if (each.start < today) {
-      result.others.push(each);
+    const session = {
+      _id: each._id,
+      code: each.code,
+      initialCash: each.initialCash,
+      status: each.status,
+      start: new Date(each.start),
+      createdAt: new Date(each.createdAt),
+      updatedAt: new Date(each.updatedAt),
+    };
+
+    if (session.start < today) {
+      result.others.push(session);
     } else {
-      result.todays.push(each);
+      result.todays.push(session);
     }
 
     return result;
@@ -114,16 +129,22 @@ const PoSOpenedSessionsStack = (props: {
           วันก่อนหน้า [{others.length}]
         </Typography>
       </Stack>
-      {others.length === 0 ? (<EmptySession />) : (
-        others.map((each, index) => (
-          <OpenedSession
-            key={index}
-            session={each}
-            index={index}
-            disabled={true}
-          />
-        ))
-      )}
+      <Stack
+        sx={{
+          borderBottom: "1px solid #aaa",
+        }}
+      >
+        {others.length === 0 ? (<EmptySession />) : (
+          others.map((each, index) => (
+            <OpenedSession
+              key={index}
+              session={each}
+              index={index}
+              disabled={true}
+            />
+          ))
+        )}
+      </Stack>
     </>
   );
 };
