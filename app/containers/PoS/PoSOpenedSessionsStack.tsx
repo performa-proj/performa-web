@@ -24,7 +24,7 @@ const OpenedSession = (props: {
 }) => {
   const { index, session, disabled } = props;
   const dt = session.start;
-  const start = `${dt.getDate()}/${dt.getMonth() + 1}/${dt.getFullYear()} ${dt.toLocaleTimeString("th", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+  const start = `${dt.getDate()}/${dt.getMonth() + 1}/${dt.getFullYear()}`;
 
   return (
     <Stack
